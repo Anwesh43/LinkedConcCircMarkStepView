@@ -188,4 +188,26 @@ class ConcCircMarkStepView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : ConcCircMarkStepView) {
+
+        private val animator : Animator = Animator(view)
+        private val ccms : ConcCircMarkStep = ConcCircMarkStep(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#BDBDBD"))
+            ccms.draw(canvas, paint)
+            animator.animate {
+                ccms.update {i, scl ->
+                    animator.start()
+                }
+            }
+        }
+
+        fun handleTap() {
+            ccms.startUpdating {
+                animator.stop()
+            }
+        }
+    }
 }
