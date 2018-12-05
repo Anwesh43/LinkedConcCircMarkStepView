@@ -211,4 +211,13 @@ class ConcCircMarkStepView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity: Activity) : ConcCircMarkStepView {
+            val view : ConcCircMarkStepView = ConcCircMarkStepView(activity)
+            activity.setContentView(view)
+            return view 
+        }
+    }
 }
