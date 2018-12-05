@@ -15,11 +15,12 @@ import android.app.Activity
 
 val nodes : Int = 5
 val lines : Int = 6
-val sizeFactor : Int = 3
+val sizeFactor : Float = 2.1f
 val strokeFactor : Int = 90
 val scDiv : Double = 0.51
 val scGap : Float = 0.05f
 val color : Int = Color.parseColor("#01579B")
+val DELAY : Long = 25
 
 fun Int.getInverse() : Float = 1f / this
 
@@ -45,11 +46,11 @@ fun Canvas.drawCCMSNode(i : Int, scale : Float, paint : Paint) {
     save()
     translate(gap * (i + 1), h/2)
     drawCircle(0f, 0f, size, paint)
-    drawArc(RectF(-size/3, -size/3, size/3, size/3), -90f, 360f * sc1, false, paint)
+    drawArc(RectF(-size/ sizeFactor, -size/ sizeFactor, size/ sizeFactor, size/ sizeFactor), -90f, 360f * sc1, false, paint)
     val deg : Float = 360f / lines
     for (j in 0..(lines - 1)) {
         val sc : Float = sc2.divideScale(j, lines)
-        val oy : Float = -size/3 - size/10
+        val oy : Float = -size/ sizeFactor - size/10
         val dy : Float = -size + size/10
         val sy : Float = oy + (dy - oy) * sc
         save()
@@ -104,7 +105,7 @@ class ConcCircMarkStepView(ctx : Context) : View(ctx) {
             if (animated) {
                 cb()
                 try {
-                    Thread.sleep(50)
+                    Thread.sleep(DELAY)
                     view.invalidate()
                 } catch (ex : Exception) {
 
@@ -203,14 +204,14 @@ class ConcCircMarkStepView(ctx : Context) : View(ctx) {
             ccms.draw(canvas, paint)
             animator.animate {
                 ccms.update {i, scl ->
-                    animator.start()
+                    animator.stop()
                 }
             }
         }
 
         fun handleTap() {
             ccms.startUpdating {
-                animator.stop()
+                animator.start()
             }
         }
     }
