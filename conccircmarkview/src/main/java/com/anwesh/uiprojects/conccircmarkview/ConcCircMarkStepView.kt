@@ -49,9 +49,12 @@ fun Canvas.drawCCMSNode(i : Int, scale : Float, paint : Paint) {
     val deg : Float = 360f / lines
     for (j in 0..(lines - 1)) {
         val sc : Float = sc2.divideScale(j, lines)
+        val oy : Float = -size/3 - size/10
+        val dy : Float = -size + size/10
+        val sy : Float = oy + (dy - oy) * sc
         save()
         rotate(deg * j)
-        drawLine(0f, -size/3 - size/10, 0f, -size + size/10, paint)
+        drawLine(0f, oy, 0f, sy, paint)
         restore()
     }
     restore()
@@ -217,7 +220,7 @@ class ConcCircMarkStepView(ctx : Context) : View(ctx) {
         fun create(activity: Activity) : ConcCircMarkStepView {
             val view : ConcCircMarkStepView = ConcCircMarkStepView(activity)
             activity.setContentView(view)
-            return view 
+            return view
         }
     }
 }
