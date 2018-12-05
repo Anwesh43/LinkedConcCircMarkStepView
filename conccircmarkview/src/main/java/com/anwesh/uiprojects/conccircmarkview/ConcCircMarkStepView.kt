@@ -29,4 +29,30 @@ fun Float.scaleFactor() : Float = Math.floor(this / scDiv).toFloat()
 
 fun Float.mirrorValue(a : Int, b : Int) : Float = (1 - scaleFactor()) * a.getInverse() + scaleFactor() * b.getInverse()
 
-fun Float.updateScale(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b) * scGap * dir  
+fun Float.updateScale(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b) * scGap * dir
+
+fun Canvas.drawCCMSNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = w / (nodes + 1)
+    val size : Float = gap / sizeFactor
+    val sc1 : Float = scale.divideScale(0, 2)
+    val sc2 : Float = scale.divideScale(1, 2)
+    paint.style = Paint.Style.STROKE
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
+    paint.color = color
+    paint.strokeCap = Paint.Cap.ROUND
+    save()
+    translate(gap * (i + 1), h/2)
+    drawCircle(0f, 0f, size, paint)
+    drawArc(RectF(-size/3, -size/3, size/3, size/3), -90f, 360f * sc1, false, paint)
+    val deg : Float = 360f / lines
+    for (j in 0..(lines - 1)) {
+        val sc : Float = sc2.divideScale(j, lines)
+        save()
+        rotate(deg * j)
+        drawLine(0f, -size/3 - size/10, 0f, -size + size/10, paint)
+        restore()
+    }
+    restore()
+}
